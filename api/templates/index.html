@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAISS Text Search with D3.js Tree</title>
+    <script src="{{ url_for('static', filename='d3.v7.min.js') }}"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: center;
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .results {
+            margin-top: 20px;
+            text-align: left;
+        }
+        svg {
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <!-- <h2>FAISS Text Search with D3.js Tree</h2> -->
+    <h2>Impact Assessment Prototype</h2>
+    <form action="/search" method="POST">
+        <input type="text" name="text" placeholder="Enter search text..." required>
+        <input type="number" name="top_n" placeholder="Top N results" value="3">
+        <button type="submit">Search</button>
+    </form>
+
+    {% if query %}
+    <h3>Results for: "{{ query }}"</h3>
+    <div class="results">
+        {% for result in results %}
+            <p><b>{{ result.text }}</b> (Score: {{ result.score }})</p>
+        {% endfor %}
+    </div>
+
+    <h3>Dependency Visualization</h3>
+    <svg width="800" height="500"></svg>
+
+    <script>
+        const treeData = {{ tree_data | safe }};
+    
+        const width = 1000, height = 600; // ✅ Increased tree height
+    
+        // ✅ Set up SVG with Zooming & Panning
+        const svg = d3.select("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .call(d3.zoom().scaleExtent([0.5, 3]).on("zoom", (event) => { // ✅ Improved zoom
+                g.attr("transform", event.transform);
+            }))
+            .append("g");
+    
+        const g = svg.append("g").attr("transform", `translate(150, 50)`);
+    
+        const root = d3.hierarchy(treeData);
+    
+        // ✅ Function to measure text width for dynamic spacing
+        function getTextWidth(text, fontSize = "12px") {
+            const canvas = document.createElement("canvas");
+            const context = canvas.getContext("2d");
+            context.font = fontSize + " Arial";
+            return context.measureText(text).width;
+        }
+    
+        // ✅ Dynamic spacing based on text width
+        function dynamicSeparation(a, b) {
+            const maxWidth = Math.max(getTextWidth(a.data.name), getTextWidth(b.data.name));
+            return maxWidth / 80;  // ✅ Adjust factor for better spacing
+        }
+    
+        // ✅ Use `d3.cluster()` for better separation
+        const treeLayout = d3.cluster() // ✅ Better spacing than `d3.tree()`
+            .size([height - 150, width - 300])
+            .separation(dynamicSeparation);  
+    
+        // ✅ Collapse nodes initially
+        function collapse(d) {
+            if (d.children) {
+                d._children = d.children;
+                d._children.forEach(collapse);
+                d.children = null;
+            }
+        }
+        root.children.forEach(collapse);
+    
+        treeLayout(root);
+    
+        // ✅ Create curved links between nodes
+        g.selectAll(".link")
+            .data(root.links())
+            .enter().append("path")
+            .attr("class", "link")
+            .attr("fill", "none")
+            .attr("stroke", "#aaa")
+            .attr("stroke-width", 2)
+            .attr("d", d3.linkVertical()
+                .x(d => d.x)
+                .y(d => d.y));
+    
+        // ✅ Create nodes with collapsible behavior
+        const node = g.selectAll(".node")
+            .data(root.descendants())
+            .enter().append("g")
+            .attr("class", "node")
+            .attr("transform", d => `translate(${d.x},${d.y})`)
+            .on("click", function (event, d) { toggleCollapse(d); update(); });
+    
+        // ✅ Add circles with color coding
+        node.append("circle")
+            .attr("r", 10)
+            .attr("fill", d => d.children ? "#FF5733" : d._children ? "#33FF57" : "#337AFF")
+            .style("cursor", "pointer");
+    
+        // ✅ Add text labels with auto spacing
+        node.append("text")
+            .attr("dy", 20) // ✅ Shift text downward
+            .attr("text-anchor", "middle")
+            .text(d => d.data.name.length > 10 ? d.data.name.substring(0, 10) + "..." : d.data.name)
+            .style("cursor", "pointer")
+            .append("title")  // ✅ Tooltip for full text
+            .text(d => d.data.name);
+    
+        // ✅ Function to toggle node collapse
+        function toggleCollapse(d) {
+            if (d.children) {
+                d._children = d.children;
+                d.children = null;
+            } else {
+                d.children = d._children;
+                d._children = null;
+            }
+        }
+    
+        // ✅ Function to update tree layout dynamically
+        function update() {
+            treeLayout(root);  
+    
+            // ✅ Update links with smooth transition
+            g.selectAll(".link")
+                .data(root.links())
+                .transition()
+                .duration(500)
+                .attr("d", d3.linkVertical()
+                    .x(d => d.x)
+                    .y(d => d.y));
+    
+            // ✅ Update nodes position
+            g.selectAll(".node")
+                .data(root.descendants())
+                .transition()
+                .duration(500)
+                .attr("transform", d => `translate(${d.x},${d.y})`);
+    
+            // ✅ Update circle colors dynamically
+            g.selectAll("circle")
+                .transition()
+                .duration(500)
+                .attr("fill", d => d.children ? "#FF5733" : d._children ? "#33FF57" : "#337AFF");
+        }
+    </script>
+    
+    
+    
+    
+    
+    {% endif %}
+</body>
+</html>

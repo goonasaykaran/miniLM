@@ -1,0 +1,8 @@
+{
+    "active_model": "minilm", 
+    "models": {
+        "minilm": "sentence-transformers/all-MiniLM-L6-v2",
+        "llama": "meta-llama/Llama-2-7b-chat-hf"
+    },
+    "comment": "Use llama in active model key to switch"
+}

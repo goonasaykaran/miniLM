@@ -1,0 +1,27 @@
+{
+    "product": {
+        "name": "Laptop",
+        "details": {
+            "brand": "Dell",
+            "RAM": "16GB",
+            "price": "1000 USD"
+        }
+    },
+    "specifications": {
+        "processor": "Intel Core i7",
+        "storage": "512GB SSD",
+        "graphics": "NVIDIA GTX 1650"
+    },
+    "customer_reviews": [
+        {
+            "user": "JohnDoe",
+            "rating": 5,
+            "comment": "Excellent performance and great build quality!"
+        },
+        {
+            "user": "JaneSmith",
+            "rating": 4,
+            "comment": "Good value for money, but battery life could be better."
+        }
+    ]
+}

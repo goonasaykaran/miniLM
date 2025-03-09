@@ -1,0 +1,16 @@
+{
+    "similar_pairs": [
+        ["The laptop has 16GB RAM", "This laptop comes with 16GB of memory"],
+        ["The battery life lasts for 10 hours", "It has a 10-hour battery backup"],
+        ["The price of the phone is $699", "This smartphone costs 699 dollars"],
+        ["This car is very fuel-efficient", "The vehicle consumes very little fuel"],
+        ["The dog is barking loudly", "A loud dog is making noise"]
+    ],
+    "dissimilar_pairs": [
+        ["The laptop has 16GB RAM", "I love going to the beach"],
+        ["The battery life lasts for 10 hours", "My favorite food is pizza"],
+        ["The price of the phone is $699", "I am learning Python programming"],
+        ["This car is very fuel-efficient", "The sky is blue today"],
+        ["The dog is barking loudly", "I just bought a new phone"]
+    ]
+}

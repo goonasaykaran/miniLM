@@ -1,0 +1,11 @@
+{
+    "before_fine_tuning": {
+        "similar_avg": 0.7153586745262146,
+        "dissimilar_avg": 0.05008380860090256
+    },
+    "after_fine_tuning": {
+        "similar_avg": 0.7177404165267944,
+        "dissimilar_avg": 0.06636854261159897
+    },
+    "impact_score": 0.018666476011276245
+}

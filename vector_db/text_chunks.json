@@ -1,0 +1,15 @@
+[
+    "product:  name: Laptop",
+    "product:  details:  brand: Dell",
+    "product:  details:  RAM: 16GB",
+    "product:  details:  price: 1000 USD",
+    "specifications:  processor: Intel Core i7",
+    "specifications:  storage: 512GB SSD",
+    "specifications:  graphics: NVIDIA GTX 1650",
+    "customer_reviews:  user: JohnDoe",
+    "customer_reviews:  rating: 5",
+    "customer_reviews:  comment: Excellent performance and great build quality!",
+    "customer_reviews:  user: JaneSmith",
+    "customer_reviews:  rating: 4",
+    "customer_reviews:  comment: Good value for money, but battery life could be better."
+]
